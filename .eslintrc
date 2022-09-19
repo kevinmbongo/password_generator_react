@@ -6,6 +6,7 @@
   "extends": ["plugin:react/recommended", "standard", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": "./tsconfig.json",
     "ecmaFeatures": {
       "jsx": true
     },
@@ -15,5 +16,10 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/react-in-jsx-scope": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

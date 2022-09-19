@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "init:project": "npm i && npx husky install",
+    "lint:eslint": "npx eslint --ext .tsx,.ts .",
+    "lint:prettier": "npx prettier -w src"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,6 +28,7 @@
     "eslint-plugin-n": "^15.2.5",
     "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-react": "^7.31.8",
+    "husky": "^8.0.1",
     "prettier": "2.7.1",
     "typescript": "^4.6.4",
     "vite": "^3.1.0"
