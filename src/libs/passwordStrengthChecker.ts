@@ -16,26 +16,40 @@ const SYMBOLS_DICT = [
   { label: "alphabetNumberCharsUppercaseSpecialChars", value: 1 },
 ];
 
-export const passwordStrengthChecker = ({ pwdLength, config }) => {
-  const symbolIndex = config
+type ConfigParams = {
+  label: string;
+  value: boolean;
+};
+
+type PasswordStrengthCheckerParams = {
+  pwdLength: number;
+  config: Array<ConfigParams>;
+};
+
+type PaswordStrength =
+  | "very weak"
+  | "weak"
+  | "medium"
+  | "strong"
+  | "very strong";
+
+export const passwordStrengthChecker = ({
+  pwdLength,
+  config,
+}: PasswordStrengthCheckerParams): PaswordStrength | void => {
+  const userSelectedOption = config
     .filter(({ value }) => value)
     .map(({ label }) => label);
 
-  const result = SYMBOLS_DICT.find(({ label }) =>
-    symbolIndex.every(
+  const currentSymbolOption = SYMBOLS_DICT.find(({ label }) =>
+    userSelectedOption.every(
       (item) => label.toLowerCase().indexOf(item.toLowerCase()) > -1
     )
   );
 
-  const score = pwdLength * result.value;
+  if (!currentSymbolOption) return console.error("Symbol not found");
 
-  const SCORES_DICT = {
-    65: "very weak",
-    78: "weak",
-    82: "medium",
-    104: "strong",
-    130: "very strong",
-  };
+  const score = pwdLength * currentSymbolOption.value;
 
   if (score <= 65) return "very weak";
   else if (score > 65 && score <= 78) return "weak";

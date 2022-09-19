@@ -19,7 +19,10 @@ const App = () => {
   const handleNumberInput = () => setIsNumber(!isNumber);
   const handleSpecialCharsInput = () => setIsSpecialChars(!isSpecialChars);
   const handleUppercase = () => setIsUppercase(!isUppercase);
-  const handlePasswordLength = (e) => setPasswordLength(Number(e.target.value));
+  const handlePasswordLength = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordLength(Number(e.target.value));
+    console.log(e);
+  };
 
   useEffect(() => {
     const pwdStrength = passwordStrengthChecker({
@@ -31,7 +34,9 @@ const App = () => {
         { label: "specialChars", value: isSpecialChars },
       ],
     });
-    setPwdStrength(pwdStrength);
+    ("very weak");
+
+    setPwdStrength(pwdStrength ?? "");
   }, [pwd]);
 
   useEffect(() => {
