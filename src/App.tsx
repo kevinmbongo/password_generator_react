@@ -1,4 +1,15 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Paper,
+  Slider,
+  Switch,
+} from "@mui/material";
+import { Container } from "@mui/system";
+import { useEffect, useState } from "react";
 import { passwordStrengthChecker } from "./libs/passwordStrengthChecker";
 
 const App = () => {
@@ -19,9 +30,13 @@ const App = () => {
   const handleNumberInput = () => setIsNumber(!isNumber);
   const handleSpecialCharsInput = () => setIsSpecialChars(!isSpecialChars);
   const handleUppercase = () => setIsUppercase(!isUppercase);
-  const handlePasswordLength = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordLength(Number(e.target.value));
-    console.log(e);
+
+  const handlePasswordLength = (
+    event: Event,
+    value: number | Array<number>,
+    activeThumb: number
+  ) => {
+    setPasswordLength(value as unknown as number);
   };
 
   useEffect(() => {
@@ -61,64 +76,69 @@ const App = () => {
 
   return (
     <>
-      <div className="my-10 ">result: {pwd} </div>
+      <Container maxWidth="sm">
+        <h1>Générateur</h1>
 
-      <div className="my-10 ">
-        Niveau de securité du mot de passe: {pwdStrength}{" "}
-      </div>
+        <Paper>
+          <div>result: {pwd} </div>
 
-      <div className="my-10">
-        <label>Size of Password (8 to 20 characters):</label>
+          <div>Niveau de securité du mot de passe: {pwdStrength} </div>
+          <Button variant="contained">Copier ce mot de passe</Button>
+        </Paper>
 
-        <input
-          className="mx-10"
-          type="number"
-          defaultValue={passwordLength}
-          onChange={handlePasswordLength}
-          min="8"
-          max="20"
-        />
+        <div>
+          <h3>LONGUEUR: {passwordLength}</h3>
+          <Paper>
+            {" "}
+            <Slider
+              defaultValue={passwordLength}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handlePasswordLength}
+              min={8}
+              max={20}
+            />
+          </Paper>
 
-        <label>
-          Letters:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isLetter}
-            onChange={handleLetterInput}
-          />
-        </label>
+          <Paper>
+            <FormControl component="fieldset" variant="standard">
+              <FormLabel component="legend">
+                <h3>OPTIONS</h3>
+              </FormLabel>
 
-        <label>
-          Numbers:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isNumber}
-            onChange={handleNumberInput}
-          />
-        </label>
-
-        <label>
-          Majuscule:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isUppercase}
-            onChange={handleUppercase}
-          />
-        </label>
-
-        <label>
-          Special Chars:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isSpecialChars}
-            onChange={handleSpecialCharsInput}
-          />
-        </label>
-      </div>
+              <FormGroup>
+                <FormControlLabel
+                  label="Letters:"
+                  control={
+                    <Switch checked={isLetter} onChange={handleLetterInput} />
+                  }
+                />
+                <FormControlLabel
+                  label="Numbers:"
+                  control={
+                    <Switch checked={isNumber} onChange={handleNumberInput} />
+                  }
+                />
+                <FormControlLabel
+                  label="Majuscule:"
+                  control={
+                    <Switch checked={isUppercase} onChange={handleUppercase} />
+                  }
+                />
+                <FormControlLabel
+                  label="Special Chars:"
+                  control={
+                    <Switch
+                      checked={isSpecialChars}
+                      onChange={handleSpecialCharsInput}
+                    />
+                  }
+                />
+              </FormGroup>
+            </FormControl>
+          </Paper>
+        </div>
+      </Container>
     </>
   );
 };
