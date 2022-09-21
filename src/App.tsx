@@ -1,16 +1,25 @@
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 import {
+  Box,
   Button,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
+  IconButton,
+  LinearProgress,
   Paper,
   Slider,
   Switch,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
-import { passwordStrengthChecker } from "./libs/passwordStrengthChecker";
+import {
+  passwordStrengthChecker,
+  PaswordStrength,
+  ProgressColorsDict,
+  SliderColors,
+} from "./libs/passwordStrengthChecker";
 
 const App = () => {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -24,7 +33,8 @@ const App = () => {
   const [isNumber, setIsNumber] = useState(false);
   const [isSpecialChars, setIsSpecialChars] = useState(true);
   const [isUppercase, setIsUppercase] = useState(false);
-  const [pwdStrength, setPwdStrength] = useState("");
+  const [pwdStrength, setPwdStrength] = useState<PaswordStrength>("");
+  const [pwdrefresh, setPwdrefresh] = useState(0);
 
   const handleLetterInput = () => setIsLetter(!isLetter);
   const handleNumberInput = () => setIsNumber(!isNumber);
@@ -72,7 +82,40 @@ const App = () => {
       .reduce((acc) => acc + dict[Math.floor(Math.random() * dict.length)], "");
 
     setPwd(password);
-  }, [passwordLength, isLetter, isNumber, isSpecialChars, isUppercase]);
+  }, [
+    passwordLength,
+    isLetter,
+    isNumber,
+    isSpecialChars,
+    isUppercase,
+    pwdrefresh,
+  ]);
+
+  const marks = [
+    {
+      value: 8,
+      label: "8",
+    },
+    {
+      value: 20,
+      label: "20",
+    },
+  ];
+
+  const [sliderColor, setSlidercolor] = useState<SliderColors>("inherit");
+
+  useEffect(() => {
+    const dict: ProgressColorsDict = {
+      "very weak": "error",
+      weak: "warning",
+      medium: "info",
+      strong: "primary",
+      "very strong": "success",
+      "": "success",
+    };
+
+    setSlidercolor(dict[pwdStrength] ?? "");
+  }, [pwdStrength]);
 
   return (
     <>
@@ -80,53 +123,70 @@ const App = () => {
         <h1>Générateur</h1>
 
         <Paper>
-          <div>result: {pwd} </div>
+          <div>
+            <span>{pwd}</span>
+            <IconButton onClick={() => setPwdrefresh(pwdrefresh + 1)}>
+              <AutorenewIcon />
+            </IconButton>
+          </div>
+
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress
+              variant="determinate"
+              value={100}
+              color={sliderColor}
+            />
+          </Box>
 
           <div>Niveau de securité du mot de passe: {pwdStrength} </div>
+
           <Button variant="contained">Copier ce mot de passe</Button>
         </Paper>
 
         <div>
-          <h3>LONGUEUR: {passwordLength}</h3>
+          <h4>LONGUEUR: {passwordLength}</h4>
           <Paper>
-            {" "}
             <Slider
               defaultValue={passwordLength}
               step={1}
               valueLabelDisplay="on"
               onChange={handlePasswordLength}
+              marks={marks}
               min={8}
               max={20}
             />
           </Paper>
 
-          <Paper>
-            <FormControl component="fieldset" variant="standard">
-              <FormLabel component="legend">
-                <h3>OPTIONS</h3>
-              </FormLabel>
-
+          <FormControl component="fieldset" variant="standard">
+            <FormLabel component="legend">
+              <h4>OPTIONS</h4>
+            </FormLabel>
+            <Paper>
               <FormGroup>
                 <FormControlLabel
-                  label="Letters:"
+                  labelPlacement="start"
+                  label="Letters (ex. abc):"
                   control={
                     <Switch checked={isLetter} onChange={handleLetterInput} />
                   }
                 />
                 <FormControlLabel
-                  label="Numbers:"
-                  control={
-                    <Switch checked={isNumber} onChange={handleNumberInput} />
-                  }
-                />
-                <FormControlLabel
-                  label="Majuscule:"
+                  labelPlacement="start"
+                  label="Majuscule (ex. ABC):"
                   control={
                     <Switch checked={isUppercase} onChange={handleUppercase} />
                   }
                 />
                 <FormControlLabel
-                  label="Special Chars:"
+                  labelPlacement="start"
+                  label="Numbers (ex. 123):"
+                  control={
+                    <Switch checked={isNumber} onChange={handleNumberInput} />
+                  }
+                />
+                <FormControlLabel
+                  labelPlacement="start"
+                  label="Special Chars (ex. #$%&):"
                   control={
                     <Switch
                       checked={isSpecialChars}
@@ -135,8 +195,8 @@ const App = () => {
                   }
                 />
               </FormGroup>
-            </FormControl>
-          </Paper>
+            </Paper>
+          </FormControl>
         </div>
       </Container>
     </>

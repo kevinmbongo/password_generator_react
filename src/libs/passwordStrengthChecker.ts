@@ -26,12 +26,31 @@ type PasswordStrengthCheckerParams = {
   config: Array<ConfigParams>;
 };
 
-type PaswordStrength =
+export type SliderColors =
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning"
+  | "inherit";
+
+export type ProgressColorsDict = {
+  "very weak": SliderColors;
+  weak: SliderColors;
+  medium: SliderColors;
+  strong: SliderColors;
+  "very strong": SliderColors;
+  "": SliderColors;
+};
+
+export type PaswordStrength =
   | "very weak"
   | "weak"
   | "medium"
   | "strong"
-  | "very strong";
+  | "very strong"
+  | "";
 
 export const passwordStrengthChecker = ({
   pwdLength,
