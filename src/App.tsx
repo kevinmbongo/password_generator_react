@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { passwordStrengthChecker } from "./libs/passwordStrengthChecker";
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
   const handleNumberInput = () => setIsNumber(!isNumber);
   const handleSpecialCharsInput = () => setIsSpecialChars(!isSpecialChars);
   const handleUppercase = () => setIsUppercase(!isUppercase);
-  const handlePasswordLength = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordLength = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordLength(Number(e.target.value));
     console.log(e);
   };
@@ -34,7 +34,6 @@ const App = () => {
         { label: "specialChars", value: isSpecialChars },
       ],
     });
-    ("very weak");
 
     setPwdStrength(pwdStrength ?? "");
   }, [pwd]);
@@ -53,7 +52,7 @@ const App = () => {
       ...(isSpecialChars ? [specialChars] : []),
     ].join();
 
-    let password = new Array(passwordLength)
+    const password = new Array(passwordLength)
       .fill(0)
       .reduce((acc) => acc + dict[Math.floor(Math.random() * dict.length)], "");
 
