@@ -3,14 +3,13 @@ import {
   Box,
   Button,
   FormControl,
-  FormControlLabel,
   FormGroup,
-  FormLabel,
   IconButton,
   LinearProgress,
   Paper,
   Slider,
   Switch,
+  Typography,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -20,6 +19,7 @@ import {
   ProgressColorsDict,
   SliderColors,
 } from "./libs/passwordStrengthChecker";
+import "./styles.css";
 
 const App = () => {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -119,86 +119,176 @@ const App = () => {
 
   return (
     <>
-      <Container maxWidth="sm">
-        <h1>Générateur</h1>
+      <Box sx={{ minWidth: "100%", display: "flex" }}>
+        <Container
+          maxWidth="sm"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 3,
+          }}
+        >
+          <Typography variant="h3" component="h1">
+            Générateur
+          </Typography>
+          <Paper
+            sx={{
+              paddingTop: 3,
+              paddingBottom: 3,
+              paddingLeft: 2,
+              paddingRight: 2,
+              borderRadius: 3,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 3,
+              }}
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h4" component="span">
+                  {pwd}
+                </Typography>
+                <IconButton onClick={() => setPwdrefresh(pwdrefresh + 1)}>
+                  <AutorenewIcon />
+                </IconButton>
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <LinearProgress
+                  sx={{ borderRadius: 10 }}
+                  variant="determinate"
+                  value={100}
+                  color={sliderColor}
+                />
+                <Typography variant="body1" component="span">
+                  Niveau de securité: {pwdStrength} !
+                </Typography>
+              </Box>
 
-        <Paper>
-          <div>
-            <span>{pwd}</span>
-            <IconButton onClick={() => setPwdrefresh(pwdrefresh + 1)}>
-              <AutorenewIcon />
-            </IconButton>
-          </div>
-
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress
-              variant="determinate"
-              value={100}
-              color={sliderColor}
-            />
-          </Box>
-
-          <div>Niveau de securité du mot de passe: {pwdStrength} </div>
-
-          <Button variant="contained">Copier ce mot de passe</Button>
-        </Paper>
-
-        <div>
-          <h4>LONGUEUR: {passwordLength}</h4>
-          <Paper>
-            <Slider
-              defaultValue={passwordLength}
-              step={1}
-              valueLabelDisplay="on"
-              onChange={handlePasswordLength}
-              marks={marks}
-              min={8}
-              max={20}
-            />
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  paddingTop: 1.5,
+                  paddingBottom: 1.5,
+                  borderRadius: 1.5,
+                }}
+              >
+                Copier ce mot de passe
+              </Button>
+            </Box>
           </Paper>
 
-          <FormControl component="fieldset" variant="standard">
-            <FormLabel component="legend">
-              <h4>OPTIONS</h4>
-            </FormLabel>
-            <Paper>
-              <FormGroup>
-                <FormControlLabel
-                  labelPlacement="start"
-                  label="Letters (ex. abc):"
-                  control={
+          <Typography variant="h5" component="h4">
+            LONGUEUR: {passwordLength}
+          </Typography>
+          <Paper sx={{ borderRadius: 3 }}>
+            <Container maxWidth="sm">
+              <Slider
+                defaultValue={passwordLength}
+                step={1}
+                valueLabelDisplay="on"
+                onChange={handlePasswordLength}
+                marks={marks}
+                min={8}
+                max={20}
+              />
+            </Container>
+          </Paper>
+
+          <Typography variant="h5" component="h4">
+            OPTIONS
+          </Typography>
+          <FormControl>
+            <Paper
+              sx={{
+                borderRadius: 3,
+                paddingTop: 3,
+                paddingBottom: 3,
+                paddingLeft: 2,
+                paddingRight: 2,
+              }}
+            >
+              <Container>
+                <FormGroup>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between;",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="h6" component="span">
+                      Letters (ex. abc):
+                    </Typography>
                     <Switch checked={isLetter} onChange={handleLetterInput} />
-                  }
-                />
-                <FormControlLabel
-                  labelPlacement="start"
-                  label="Majuscule (ex. ABC):"
-                  control={
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between;",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="h6" component="span">
+                      Majuscule (ex. ABC):
+                    </Typography>
                     <Switch checked={isUppercase} onChange={handleUppercase} />
-                  }
-                />
-                <FormControlLabel
-                  labelPlacement="start"
-                  label="Numbers (ex. 123):"
-                  control={
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between;",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="h6" component="span">
+                      Numbers (ex. 123):
+                    </Typography>
                     <Switch checked={isNumber} onChange={handleNumberInput} />
-                  }
-                />
-                <FormControlLabel
-                  labelPlacement="start"
-                  label="Special Chars (ex. #$%&):"
-                  control={
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between;",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography variant="h6" component="span">
+                      Special Chars (ex. #$%&):
+                    </Typography>
                     <Switch
                       checked={isSpecialChars}
                       onChange={handleSpecialCharsInput}
                     />
-                  }
-                />
-              </FormGroup>
+                  </Box>
+                </FormGroup>
+              </Container>
             </Paper>
           </FormControl>
-        </div>
-      </Container>
+        </Container>
+      </Box>
     </>
   );
 };
