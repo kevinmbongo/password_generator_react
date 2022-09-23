@@ -119,7 +119,14 @@ const App = () => {
 
   return (
     <>
-      <Box sx={{ minWidth: "100%", display: "flex" }}>
+      <Box
+        sx={{
+          minWidth: "100%",
+          display: "flex",
+          paddingTop: 5,
+          paddingBottom: 5,
+        }}
+      >
         <Container
           maxWidth="sm"
           sx={{
@@ -129,7 +136,7 @@ const App = () => {
             gap: 3,
           }}
         >
-          <Typography variant="h3" component="h1">
+          <Typography variant="h3" component="h1" sx={{ fontWeight: 900 }}>
             Générateur
           </Typography>
           <Paper
@@ -158,7 +165,7 @@ const App = () => {
                   alignItems: "center",
                 }}
               >
-                <Typography variant="h4" component="span">
+                <Typography variant="h4" component="span" fontSize="25px">
                   {pwd}
                 </Typography>
                 <IconButton onClick={() => setPwdrefresh(pwdrefresh + 1)}>
@@ -171,12 +178,12 @@ const App = () => {
                 }}
               >
                 <LinearProgress
-                  sx={{ borderRadius: 10 }}
+                  sx={{ borderRadius: 10, marginBottom: 0.5 }}
                   variant="determinate"
                   value={100}
                   color={sliderColor}
                 />
-                <Typography variant="body1" component="span">
+                <Typography variant="inherit" component="span" fontSize="16px">
                   Niveau de securité: {pwdStrength} !
                 </Typography>
               </Box>
@@ -184,12 +191,14 @@ const App = () => {
               <Button
                 variant="contained"
                 size="large"
+                color="success"
                 sx={{
-                  paddingLeft: 5,
-                  paddingRight: 5,
+                  paddingLeft: 7,
+                  paddingRight: 7,
                   paddingTop: 1.5,
                   paddingBottom: 1.5,
                   borderRadius: 1.5,
+                  color: "white",
                 }}
               >
                 Copier ce mot de passe
@@ -197,10 +206,11 @@ const App = () => {
             </Box>
           </Paper>
 
-          <Typography variant="h5" component="h4">
+          <Typography variant="inherit" component="h4" color="text.secondary">
             LONGUEUR: {passwordLength}
           </Typography>
-          <Paper sx={{ borderRadius: 3 }}>
+
+          <Paper sx={{ borderRadius: 3, paddingTop: 4, paddingBottom: 1 }}>
             <Container maxWidth="sm">
               <Slider
                 defaultValue={passwordLength}
@@ -214,7 +224,7 @@ const App = () => {
             </Container>
           </Paper>
 
-          <Typography variant="h5" component="h4">
+          <Typography variant="inherit" component="h4" color="text.secondary">
             OPTIONS
           </Typography>
           <FormControl>
@@ -236,7 +246,7 @@ const App = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="h6" component="span">
+                    <Typography variant="subtitle1" component="span">
                       Letters (ex. abc):
                     </Typography>
                     <Switch checked={isLetter} onChange={handleLetterInput} />
@@ -249,8 +259,16 @@ const App = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="h6" component="span">
-                      Majuscule (ex. ABC):
+                    <Typography variant="subtitle1" component="span">
+                      Majuscule (ex.{" "}
+                      <Typography
+                        variant="subtitle1"
+                        component="span"
+                        color="greenyellow"
+                      >
+                        ABC
+                      </Typography>
+                      ):
                     </Typography>
                     <Switch checked={isUppercase} onChange={handleUppercase} />
                   </Box>
@@ -262,8 +280,16 @@ const App = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="h6" component="span">
-                      Numbers (ex. 123):
+                    <Typography variant="subtitle1" component="span">
+                      Numbers (ex.{" "}
+                      <Typography
+                        variant="subtitle1"
+                        component="span"
+                        color="blueviolet"
+                      >
+                        123
+                      </Typography>
+                      ):
                     </Typography>
                     <Switch checked={isNumber} onChange={handleNumberInput} />
                   </Box>
@@ -275,8 +301,16 @@ const App = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Typography variant="h6" component="span">
-                      Special Chars (ex. #$%&):
+                    <Typography variant="subtitle1" component="span">
+                      Special Chars (ex.{" "}
+                      <Typography
+                        variant="subtitle1"
+                        component="span"
+                        color="orange"
+                      >
+                        #$%&
+                      </Typography>
+                      ):
                     </Typography>
                     <Switch
                       checked={isSpecialChars}
