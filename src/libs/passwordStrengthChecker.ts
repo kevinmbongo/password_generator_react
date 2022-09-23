@@ -1,3 +1,5 @@
+import { AlertColor } from "@mui/material";
+
 const SYMBOLS_DICT = [
   { label: "numberChars", value: 3.32 },
   { label: "alphabet", value: 4.7 },
@@ -15,6 +17,13 @@ const SYMBOLS_DICT = [
   { label: "numberCharsUppercaseSpecialChars", value: 6.49 },
   { label: "alphabetNumberCharsUppercaseSpecialChars", value: 7 },
 ];
+
+export type SnackBarMessage = { severity: AlertColor; message: string };
+
+export type MessageDict = {
+  success: SnackBarMessage;
+  error: SnackBarMessage;
+};
 
 type ConfigParams = {
   label: string;

@@ -1,5 +1,6 @@
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -8,16 +9,20 @@ import {
   LinearProgress,
   Paper,
   Slider,
+  Snackbar,
   Switch,
   Typography,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
+import { useCopyToClipboard } from "usehooks-ts";
 import {
+  MessageDict,
   passwordStrengthChecker,
   PaswordStrength,
   ProgressColorsDict,
   SliderColors,
+  SnackBarMessage,
 } from "./libs/passwordStrengthChecker";
 import "./styles.css";
 
@@ -35,6 +40,9 @@ const App = () => {
   const [isUppercase, setIsUppercase] = useState(false);
   const [pwdStrength, setPwdStrength] = useState<PaswordStrength>("");
   const [pwdrefresh, setPwdrefresh] = useState(0);
+  const [snackBarMessage, setSnackBarMessage] = useState<SnackBarMessage>();
+
+  const copy = useCopyToClipboard();
 
   const handleLetterInput = () => setIsLetter(!isLetter);
   const handleNumberInput = () => setIsNumber(!isNumber);
@@ -47,6 +55,23 @@ const App = () => {
     activeThumb: number
   ) => {
     setPasswordLength(value as unknown as number);
+  };
+
+  const handleCopyPwdToClipboard = async () => {
+    const success = await copy[1](pwd);
+
+    const index = success ? "success" : "error";
+
+    const generateSnackMessage = (): SnackBarMessage => {
+      const messagesDict: MessageDict = {
+        success: { severity: "success", message: "Mot de passe copier" },
+        error: { severity: "error", message: "Erreur lors de la copie" },
+      };
+
+      return messagesDict[index];
+    };
+
+    setSnackBarMessage(generateSnackMessage());
   };
 
   useEffect(() => {
@@ -139,6 +164,7 @@ const App = () => {
           <Typography variant="h3" component="h1" sx={{ fontWeight: 900 }}>
             Générateur
           </Typography>
+
           <Paper
             sx={{
               paddingTop: 3,
@@ -168,10 +194,12 @@ const App = () => {
                 <Typography variant="h4" component="span" fontSize="25px">
                   {pwd}
                 </Typography>
+
                 <IconButton onClick={() => setPwdrefresh(pwdrefresh + 1)}>
                   <AutorenewIcon />
                 </IconButton>
               </Box>
+
               <Box
                 sx={{
                   width: "100%",
@@ -192,6 +220,7 @@ const App = () => {
                 variant="contained"
                 size="large"
                 color="success"
+                onClick={handleCopyPwdToClipboard}
                 sx={{
                   paddingLeft: 7,
                   paddingRight: 7,
@@ -203,6 +232,17 @@ const App = () => {
               >
                 Copier ce mot de passe
               </Button>
+
+              <Snackbar
+                open={!!snackBarMessage}
+                onClose={() => setSnackBarMessage(undefined)}
+                autoHideDuration={2500}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert severity={snackBarMessage?.severity}>
+                  {snackBarMessage?.message}
+                </Alert>
+              </Snackbar>
             </Box>
           </Paper>
 
