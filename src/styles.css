@@ -1,3 +1,8 @@
+.App {
+  text-align: center;
+  min-width: 350px;
+}
+
 .paper {
   flex-basis: auto;
   gap: 0.5rem;

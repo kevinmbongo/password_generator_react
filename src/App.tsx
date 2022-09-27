@@ -1,4 +1,5 @@
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+
 import {
   Alert,
   Box,
@@ -13,6 +14,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
+
 import { Container } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useCopyToClipboard } from "usehooks-ts";
@@ -32,7 +34,7 @@ const App = () => {
   const numberChars = "0123456789";
   const specialChars = "!#$%&()*+,-./:;<=>?@[]^_`{|}~";
 
-  const [passwordLength, setPasswordLength] = useState(8);
+  const [passwordLength, setPasswordLength] = useState(14);
   const [pwd, setPwd] = useState("");
   const [isLetter, setIsLetter] = useState(false);
   const [isNumber, setIsNumber] = useState(false);
@@ -146,10 +148,10 @@ const App = () => {
     <>
       <Box
         sx={{
-          minWidth: "100%",
+          width: "390px",
           display: "flex",
-          paddingTop: 5,
-          paddingBottom: 5,
+          paddingTop: 3,
+          paddingBottom: 3,
         }}
       >
         <Container
@@ -158,17 +160,13 @@ const App = () => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            gap: 3,
+            gap: 1,
           }}
         >
-          <Typography variant="h3" component="h1" sx={{ fontWeight: 900 }}>
-            Générateur
-          </Typography>
-
           <Paper
             sx={{
-              paddingTop: 3,
-              paddingBottom: 3,
+              paddingTop: 2,
+              paddingBottom: 2,
               paddingLeft: 2,
               paddingRight: 2,
               borderRadius: 3,
@@ -191,7 +189,12 @@ const App = () => {
                   alignItems: "center",
                 }}
               >
-                <Typography variant="h4" component="span" fontSize="25px">
+                <Typography
+                  variant="h4"
+                  component="div"
+                  fontSize="18px"
+                  sx={{ fontWeight: "bold" }}
+                >
                   {pwd}
                 </Typography>
 
@@ -211,7 +214,7 @@ const App = () => {
                   value={100}
                   color={sliderColor}
                 />
-                <Typography variant="inherit" component="span" fontSize="16px">
+                <Typography variant="inherit" component="span" fontSize="14px">
                   Niveau de securité: {pwdStrength} !
                 </Typography>
               </Box>
@@ -224,10 +227,11 @@ const App = () => {
                 sx={{
                   paddingLeft: 7,
                   paddingRight: 7,
-                  paddingTop: 1.5,
-                  paddingBottom: 1.5,
+                  paddingTop: 1,
+                  paddingBottom: 1,
                   borderRadius: 1.5,
                   color: "white",
+                  fontSize: "14px",
                 }}
               >
                 Copier ce mot de passe
@@ -246,119 +250,133 @@ const App = () => {
             </Box>
           </Paper>
 
-          <Typography variant="inherit" component="h4" color="text.secondary">
+          <Typography
+            variant="inherit"
+            component="h4"
+            color="text.secondary"
+            fontSize="14px"
+          >
             LONGUEUR: {passwordLength}
           </Typography>
 
-          <Paper sx={{ borderRadius: 3, paddingTop: 4, paddingBottom: 1 }}>
-            <Container maxWidth="sm">
-              <Slider
-                defaultValue={passwordLength}
-                step={1}
-                valueLabelDisplay="on"
-                onChange={handlePasswordLength}
-                marks={marks}
-                min={8}
-                max={20}
-              />
-            </Container>
+          <Paper
+            sx={{
+              borderRadius: 3,
+              paddingTop: 4,
+              paddingBottom: 1,
+              paddingLeft: 2,
+              paddingRight: 2,
+            }}
+          >
+            <Slider
+              value={passwordLength}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handlePasswordLength}
+              marks={marks}
+              min={8}
+              max={20}
+            />
           </Paper>
 
-          <Typography variant="inherit" component="h4" color="text.secondary">
+          <Typography
+            variant="inherit"
+            component="h4"
+            color="text.secondary"
+            fontSize="14px"
+          >
             OPTIONS
           </Typography>
           <FormControl>
             <Paper
               sx={{
                 borderRadius: 3,
-                paddingTop: 3,
-                paddingBottom: 3,
+                paddingTop: 1,
+                paddingBottom: 1,
                 paddingLeft: 2,
                 paddingRight: 2,
               }}
             >
-              <Container>
-                <FormGroup>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between;",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography variant="subtitle1" component="span">
-                      Letters (ex. abc):
-                    </Typography>
-                    <Switch checked={isLetter} onChange={handleLetterInput} />
-                  </Box>
+              <FormGroup>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Letters (ex. abc):
+                  </Typography>
+                  <Switch checked={isLetter} onChange={handleLetterInput} />
+                </Box>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between;",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography variant="subtitle1" component="span">
-                      Majuscule (ex.{" "}
-                      <Typography
-                        variant="subtitle1"
-                        component="span"
-                        color="greenyellow"
-                      >
-                        ABC
-                      </Typography>
-                      ):
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Majuscule (ex.{" "}
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      color="greenyellow"
+                    >
+                      ABC
                     </Typography>
-                    <Switch checked={isUppercase} onChange={handleUppercase} />
-                  </Box>
+                    ):
+                  </Typography>
+                  <Switch checked={isUppercase} onChange={handleUppercase} />
+                </Box>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between;",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography variant="subtitle1" component="span">
-                      Numbers (ex.{" "}
-                      <Typography
-                        variant="subtitle1"
-                        component="span"
-                        color="blueviolet"
-                      >
-                        123
-                      </Typography>
-                      ):
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Numbers (ex.{" "}
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      color="blueviolet"
+                    >
+                      123
                     </Typography>
-                    <Switch checked={isNumber} onChange={handleNumberInput} />
-                  </Box>
+                    ):
+                  </Typography>
+                  <Switch checked={isNumber} onChange={handleNumberInput} />
+                </Box>
 
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between;",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography variant="subtitle1" component="span">
-                      Special Chars (ex.{" "}
-                      <Typography
-                        variant="subtitle1"
-                        component="span"
-                        color="orange"
-                      >
-                        #$%&
-                      </Typography>
-                      ):
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Special Chars (ex.{" "}
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      color="orange"
+                    >
+                      #$%&
                     </Typography>
-                    <Switch
-                      checked={isSpecialChars}
-                      onChange={handleSpecialCharsInput}
-                    />
-                  </Box>
-                </FormGroup>
-              </Container>
+                    ):
+                  </Typography>
+                  <Switch
+                    checked={isSpecialChars}
+                    onChange={handleSpecialCharsInput}
+                  />
+                </Box>
+              </FormGroup>
             </Paper>
           </FormControl>
         </Container>
