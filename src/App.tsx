@@ -150,8 +150,8 @@ const App = () => {
         sx={{
           width: "390px",
           display: "flex",
-          paddingTop: 3,
-          paddingBottom: 3,
+          paddingTop: 2,
+          paddingBottom: 2,
         }}
       >
         <Container
@@ -160,15 +160,12 @@ const App = () => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            gap: 1,
+            gap: 1.5,
           }}
         >
           <Paper
             sx={{
-              paddingTop: 2,
-              paddingBottom: 2,
-              paddingLeft: 2,
-              paddingRight: 2,
+              padding: 2,
               borderRadius: 3,
             }}
           >
@@ -178,7 +175,7 @@ const App = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                gap: 3,
+                gap: 2,
               }}
             >
               <Box
@@ -192,7 +189,7 @@ const App = () => {
                 <Typography
                   variant="h4"
                   component="div"
-                  fontSize="18px"
+                  fontSize="20px"
                   sx={{ fontWeight: "bold" }}
                 >
                   {pwd}
@@ -225,13 +222,12 @@ const App = () => {
                 color="success"
                 onClick={handleCopyPwdToClipboard}
                 sx={{
-                  paddingLeft: 7,
-                  paddingRight: 7,
+                  paddingLeft: 6,
+                  paddingRight: 6,
                   paddingTop: 1,
                   paddingBottom: 1,
                   borderRadius: 1.5,
                   color: "white",
-                  fontSize: "14px",
                 }}
               >
                 Copier ce mot de passe
@@ -254,7 +250,7 @@ const App = () => {
             variant="inherit"
             component="h4"
             color="text.secondary"
-            fontSize="14px"
+            fontSize="16px"
           >
             LONGUEUR: {passwordLength}
           </Typography>
@@ -283,7 +279,7 @@ const App = () => {
             variant="inherit"
             component="h4"
             color="text.secondary"
-            fontSize="14px"
+            fontSize="16px"
           >
             OPTIONS
           </Typography>
