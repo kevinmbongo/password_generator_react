@@ -1,5 +1,32 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { passwordStrengthChecker } from "./libs/passwordStrengthChecker";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  FormGroup,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Slider,
+  Snackbar,
+  Switch,
+  Typography,
+} from "@mui/material";
+
+import { Container } from "@mui/system";
+import { useEffect, useState } from "react";
+import { useCopyToClipboard } from "usehooks-ts";
+import {
+  MessageDict,
+  passwordStrengthChecker,
+  PaswordStrength,
+  ProgressColorsDict,
+  SliderColors,
+  SnackBarMessage,
+} from "./libs/passwordStrengthChecker";
+import "./styles.css";
 
 const App = () => {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -7,21 +34,46 @@ const App = () => {
   const numberChars = "0123456789";
   const specialChars = "!#$%&()*+,-./:;<=>?@[]^_`{|}~";
 
-  const [passwordLength, setPasswordLength] = useState(8);
+  const [passwordLength, setPasswordLength] = useState(14);
   const [pwd, setPwd] = useState("");
   const [isLetter, setIsLetter] = useState(false);
   const [isNumber, setIsNumber] = useState(false);
   const [isSpecialChars, setIsSpecialChars] = useState(true);
   const [isUppercase, setIsUppercase] = useState(false);
-  const [pwdStrength, setPwdStrength] = useState("");
+  const [pwdStrength, setPwdStrength] = useState<PaswordStrength>("");
+  const [pwdrefresh, setPwdrefresh] = useState(0);
+  const [snackBarMessage, setSnackBarMessage] = useState<SnackBarMessage>();
+
+  const copy = useCopyToClipboard();
 
   const handleLetterInput = () => setIsLetter(!isLetter);
   const handleNumberInput = () => setIsNumber(!isNumber);
   const handleSpecialCharsInput = () => setIsSpecialChars(!isSpecialChars);
   const handleUppercase = () => setIsUppercase(!isUppercase);
-  const handlePasswordLength = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordLength(Number(e.target.value));
-    console.log(e);
+
+  const handlePasswordLength = (
+    event: Event,
+    value: number | Array<number>,
+    activeThumb: number
+  ) => {
+    setPasswordLength(value as unknown as number);
+  };
+
+  const handleCopyPwdToClipboard = async () => {
+    const success = await copy[1](pwd);
+
+    const index = success ? "success" : "error";
+
+    const generateSnackMessage = (): SnackBarMessage => {
+      const messagesDict: MessageDict = {
+        success: { severity: "success", message: "Mot de passe copier" },
+        error: { severity: "error", message: "Erreur lors de la copie" },
+      };
+
+      return messagesDict[index];
+    };
+
+    setSnackBarMessage(generateSnackMessage());
   };
 
   useEffect(() => {
@@ -57,68 +109,274 @@ const App = () => {
       .reduce((acc) => acc + dict[Math.floor(Math.random() * dict.length)], "");
 
     setPwd(password);
-  }, [passwordLength, isLetter, isNumber, isSpecialChars, isUppercase]);
+  }, [
+    passwordLength,
+    isLetter,
+    isNumber,
+    isSpecialChars,
+    isUppercase,
+    pwdrefresh,
+  ]);
+
+  const marks = [
+    {
+      value: 8,
+      label: "8",
+    },
+    {
+      value: 20,
+      label: "20",
+    },
+  ];
+
+  const [sliderColor, setSlidercolor] = useState<SliderColors>("inherit");
+
+  useEffect(() => {
+    const dict: ProgressColorsDict = {
+      "very weak": "error",
+      weak: "warning",
+      medium: "info",
+      strong: "primary",
+      "very strong": "success",
+      "": "success",
+    };
+
+    setSlidercolor(dict[pwdStrength] ?? "");
+  }, [pwdStrength]);
 
   return (
     <>
-      <div className="my-10 ">result: {pwd} </div>
+      <Box
+        sx={{
+          width: "390px",
+          display: "flex",
+          paddingTop: 2,
+          paddingBottom: 2,
+        }}
+      >
+        <Container
+          maxWidth="sm"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 1.5,
+          }}
+        >
+          <Paper
+            sx={{
+              padding: 2,
+              borderRadius: 3,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  component="div"
+                  fontSize="20px"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  {pwd}
+                </Typography>
 
-      <div className="my-10 ">
-        Niveau de securité du mot de passe: {pwdStrength}{" "}
-      </div>
+                <IconButton onClick={() => setPwdrefresh(pwdrefresh + 1)}>
+                  <AutorenewIcon />
+                </IconButton>
+              </Box>
 
-      <div className="my-10">
-        <label>Size of Password (8 to 20 characters):</label>
+              <Box
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <LinearProgress
+                  sx={{ borderRadius: 10, marginBottom: 0.5 }}
+                  variant="determinate"
+                  value={100}
+                  color={sliderColor}
+                />
+                <Typography variant="inherit" component="span" fontSize="14px">
+                  Niveau de securité: {pwdStrength} !
+                </Typography>
+              </Box>
 
-        <input
-          className="mx-10"
-          type="number"
-          defaultValue={passwordLength}
-          onChange={handlePasswordLength}
-          min="8"
-          max="20"
-        />
+              <Button
+                variant="contained"
+                size="large"
+                color="success"
+                onClick={handleCopyPwdToClipboard}
+                sx={{
+                  paddingLeft: 6,
+                  paddingRight: 6,
+                  paddingTop: 1,
+                  paddingBottom: 1,
+                  borderRadius: 1.5,
+                  color: "white",
+                }}
+              >
+                Copier ce mot de passe
+              </Button>
 
-        <label>
-          Letters:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isLetter}
-            onChange={handleLetterInput}
-          />
-        </label>
+              <Snackbar
+                open={!!snackBarMessage}
+                onClose={() => setSnackBarMessage(undefined)}
+                autoHideDuration={2500}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert severity={snackBarMessage?.severity}>
+                  {snackBarMessage?.message}
+                </Alert>
+              </Snackbar>
+            </Box>
+          </Paper>
 
-        <label>
-          Numbers:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isNumber}
-            onChange={handleNumberInput}
-          />
-        </label>
+          <Typography
+            variant="inherit"
+            component="h4"
+            color="text.secondary"
+            fontSize="16px"
+          >
+            LONGUEUR: {passwordLength}
+          </Typography>
 
-        <label>
-          Majuscule:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isUppercase}
-            onChange={handleUppercase}
-          />
-        </label>
+          <Paper
+            sx={{
+              borderRadius: 3,
+              paddingTop: 4,
+              paddingBottom: 1,
+              paddingLeft: 2,
+              paddingRight: 2,
+            }}
+          >
+            <Slider
+              value={passwordLength}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handlePasswordLength}
+              marks={marks}
+              min={8}
+              max={20}
+            />
+          </Paper>
 
-        <label>
-          Special Chars:
-          <input
-            className="mx-10"
-            type="checkbox"
-            checked={isSpecialChars}
-            onChange={handleSpecialCharsInput}
-          />
-        </label>
-      </div>
+          <Typography
+            variant="inherit"
+            component="h4"
+            color="text.secondary"
+            fontSize="16px"
+          >
+            OPTIONS
+          </Typography>
+          <FormControl>
+            <Paper
+              sx={{
+                borderRadius: 3,
+                paddingTop: 1,
+                paddingBottom: 1,
+                paddingLeft: 2,
+                paddingRight: 2,
+              }}
+            >
+              <FormGroup>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Letters (ex. abc):
+                  </Typography>
+                  <Switch checked={isLetter} onChange={handleLetterInput} />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Majuscule (ex.{" "}
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      color="greenyellow"
+                    >
+                      ABC
+                    </Typography>
+                    ):
+                  </Typography>
+                  <Switch checked={isUppercase} onChange={handleUppercase} />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Numbers (ex.{" "}
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      color="blueviolet"
+                    >
+                      123
+                    </Typography>
+                    ):
+                  </Typography>
+                  <Switch checked={isNumber} onChange={handleNumberInput} />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between;",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="subtitle2" component="span">
+                    Special Chars (ex.{" "}
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      color="orange"
+                    >
+                      #$%&
+                    </Typography>
+                    ):
+                  </Typography>
+                  <Switch
+                    checked={isSpecialChars}
+                    onChange={handleSpecialCharsInput}
+                  />
+                </Box>
+              </FormGroup>
+            </Paper>
+          </FormControl>
+        </Container>
+      </Box>
     </>
   );
 };

@@ -1,20 +1,29 @@
+import { AlertColor } from "@mui/material";
+
 const SYMBOLS_DICT = [
   { label: "numberChars", value: 3.32 },
   { label: "alphabet", value: 4.7 },
   { label: "uppercase", value: 4.7 },
   { label: "specialChars", value: 5 },
-  { label: "alphabetNumberChars", value: 1 },
-  { label: "alphabetSpecialChars", value: 1 },
-  { label: "alphabetUppercase", value: 1 },
-  { label: "numberCharsSpecialChars", value: 1 },
-  { label: "numberCharsUppercase", value: 1 },
-  { label: "uppercaseSpecialChars", value: 1 },
-  { label: "alphabetNumberCharsUppercase", value: 1 },
-  { label: "alphabetNumberCharsSpecialChars", value: 1 },
-  { label: "alphabetUppercaseSpecialChars", value: 1 },
-  { label: "numberCharsUppercaseSpecialChars", value: 1 },
-  { label: "alphabetNumberCharsUppercaseSpecialChars", value: 1 },
+  { label: "alphabetNumberChars", value: 5.17 },
+  { label: "alphabetUppercase", value: 5.3 },
+  { label: "numberCharsUppercase", value: 5.45 },
+  { label: "numberCharsSpecialChars", value: 5.55 },
+  { label: "alphabetSpecialChars", value: 5.68 },
+  { label: "uppercaseSpecialChars", value: 5.75 },
+  { label: "alphabetNumberCharsUppercase", value: 5.95 },
+  { label: "alphabetUppercaseSpecialChars", value: 6.1 },
+  { label: "alphabetNumberCharsSpecialChars", value: 6.2 },
+  { label: "numberCharsUppercaseSpecialChars", value: 6.49 },
+  { label: "alphabetNumberCharsUppercaseSpecialChars", value: 7 },
 ];
+
+export type SnackBarMessage = { severity: AlertColor; message: string };
+
+export type MessageDict = {
+  success: SnackBarMessage;
+  error: SnackBarMessage;
+};
 
 type ConfigParams = {
   label: string;
@@ -26,12 +35,31 @@ type PasswordStrengthCheckerParams = {
   config: Array<ConfigParams>;
 };
 
-type PaswordStrength =
+export type SliderColors =
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning"
+  | "inherit";
+
+export type ProgressColorsDict = {
+  "very weak": SliderColors;
+  weak: SliderColors;
+  medium: SliderColors;
+  strong: SliderColors;
+  "very strong": SliderColors;
+  "": SliderColors;
+};
+
+export type PaswordStrength =
   | "very weak"
   | "weak"
   | "medium"
   | "strong"
-  | "very strong";
+  | "very strong"
+  | "";
 
 export const passwordStrengthChecker = ({
   pwdLength,
